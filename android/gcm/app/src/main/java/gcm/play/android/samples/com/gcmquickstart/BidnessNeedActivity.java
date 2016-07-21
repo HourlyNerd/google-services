@@ -29,6 +29,9 @@ public class BidnessNeedActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.business_need);
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setIcon(R.drawable.ct_logo);
 
         businessNeed = (EditText)findViewById(R.id.need_edit_view);
         submitButton = (Button)findViewById(R.id.submit_button);
