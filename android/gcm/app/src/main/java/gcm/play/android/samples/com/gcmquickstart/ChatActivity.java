@@ -42,10 +42,11 @@ public class ChatActivity extends AppCompatActivity {
         messagesListView = (ListView) findViewById(R.id.chat_listview);
 
         currentMessage.setHint("type here to chat...");
-        currentMessage.setTextColor(getColor(R.color.white));
+//        currentMessage.setTextColor(getColor(R.color.white));
 
         adapter = new ChatAdapter(this, chatMessages);
         messagesListView.setAdapter(adapter);
+        messagesListView.setDivider(null);
 
         Log.i("CHATALANT", "Chat activity built");
 
