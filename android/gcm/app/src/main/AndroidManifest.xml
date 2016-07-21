@@ -25,6 +25,10 @@
         <activity android:name=".ChatActivity"
             android:label="Mark Roper" />
 
+        <activity android:name=".BidnessNeedActivity"
+            android:label="Describe your need"
+            android:windowSoftInputMode="adjustResize"/>
+
         <!-- [START gcm_receiver] -->
         <receiver
             android:name="com.google.android.gms.gcm.GcmReceiver"
