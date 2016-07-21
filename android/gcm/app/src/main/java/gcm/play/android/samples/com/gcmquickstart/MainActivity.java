@@ -73,6 +73,9 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this, RegistrationIntentService.class);
             startService(intent);
         }
+
+        // TODO just for testing
+        startActivity(new Intent(this, ChatActivity.class));
     }
 
     @Override
