@@ -47,6 +47,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+
         mRegistrationProgressBar = (ProgressBar) findViewById(R.id.registrationProgressBar);
         mRegistrationBroadcastReceiver = new BroadcastReceiver() {
             @Override
@@ -74,8 +76,10 @@ public class MainActivity extends AppCompatActivity {
             startService(intent);
         }
 
+        startActivity(new Intent(this, ChatActivity.class));
+
         // TODO just for testing
-        startActivity(new Intent(this, BidnessNeedActivity.class));
+//        startActivity(new Intent(this, BidnessNeedActivity.class));
     }
 
     @Override

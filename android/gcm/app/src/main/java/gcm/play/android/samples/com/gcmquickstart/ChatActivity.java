@@ -78,11 +78,7 @@ public class ChatActivity extends AppCompatActivity {
         // we could show the message in grey until we receive (the same) message back
         // as a push notification, in which case it turns black
         String user = getUser();
-        if (user != null) {
-            MyGcmSenderService.sendMessage(currentMsg, user);
-        } else {
-            MyGcmSenderService.sendMessage(currentMsg);
-        }
+        new AsyncGcmSender().execute(currentMsg, user);
 
         displayAndSaveCurrentUserMessage(currentMsg);
         adapter.notifyDataSetChanged();
@@ -90,8 +86,7 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private String getUser() {
-        SharedPreferences userPrefs = getSharedPreferences("USER_PREFS", Context.MODE_PRIVATE);
-        return userPrefs.getString("username", null);
+        return UserManager.getUserName(this);
     }
 
 

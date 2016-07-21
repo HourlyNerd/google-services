@@ -29,8 +29,6 @@ import android.util.Log;
 
 import com.google.android.gms.gcm.GcmListenerService;
 
-import java.util.Map;
-
 public class MyGcmListenerService extends GcmListenerService {
 
     public static final String NEW_MESSAGE_BROADCAST = "NEW_MSG_BROADCAST";
@@ -39,7 +37,7 @@ public class MyGcmListenerService extends GcmListenerService {
     public static final String SHARED_PREFS_MSGS = "chatMessages";
     public static final String SHARED_PREFS_SENDERS = "chatParticipants";
 
-    private static final String TAG = "MyGcmListenerService";
+    private static final String TAG = "CATALANT";
 
     /**
      * Called when message is received.
@@ -54,35 +52,46 @@ public class MyGcmListenerService extends GcmListenerService {
         String message = data.getString("message");
         String sender = data.getString("sender");
         Log.d(TAG, "From: " + from);
+        Log.d(TAG, "Real (Sender) From: " + sender);
         Log.d(TAG, "Message: " + message);
 
-        if (from.startsWith("/topics/")) {
-            // message received from some topic.
+        String thisUser = UserManager.getUserName(this);
+        if (thisUser == null) { thisUser = UserConsts.DEFAULT_USER; }
+
+        if (thisUser.equals(sender)) {
+            Log.d(TAG, "Current user " + thisUser + " received message from self... ignoring.");
         } else {
-            // normal downstream message.
+            Log.d(TAG, "Current user " + thisUser + " got message from " + sender + ", processing it.");
         }
 
-        // add message to local persistent storage
-        addMessageToStorage(this, message, from);
+        if(null == sender || // for backwards compatibility, could remove sometime
+                !sender.equals(thisUser)) /* ignore messages we sent to ourselves via our awesome broadcast architecture */ {
 
-        // let any running apps know that this data has changed
-        Intent broadcast = new Intent();
-        broadcast.setAction(NEW_MESSAGE_BROADCAST);
-        sendBroadcast(broadcast);
+            if (from.startsWith("/topics/")) {
+                // message received from some topic.
+            } else {
+                // normal downstream message.
+            }
 
-        // [START_EXCLUDE]
-        /**
-         * Production applications would usually process the message here.
-         * Eg: - Syncing with server.
-         *     - Store message in local database.
-         *     - Update UI.
-         */
+            // add message to local persistent storage
+            addMessageToStorage(this, message, from);
 
-        /**
-         * In some cases it may be useful to show a notification indicating to the user
-         * that a message was received.
-         */
-        if(null == sender || !sender.equals(UserConsts.CURRENT_USER)) {
+            // let any running apps know that this data has changed
+            Intent broadcast = new Intent();
+            broadcast.setAction(NEW_MESSAGE_BROADCAST);
+            sendBroadcast(broadcast);
+
+            // [START_EXCLUDE]
+            /**
+             * Production applications would usually process the message here.
+             * Eg: - Syncing with server.
+             *     - Store message in local database.
+             *     - Update UI.
+             *
+             * In some cases it may be useful to show a notification indicating to the user
+             * that a message was received.
+             */
+
             sendNotification(message);
         }
     }
