@@ -32,8 +32,8 @@ import java.net.URL;
 // since it includes the server's API key. For information on GCM server
 // implementation see: https://developers.google.com/cloud-messaging/server
 public class GcmSender {
-
-    public static final String API_KEY = "API_KEY";
+    // 277722702472
+    public static final String API_KEY = "AIzaSyDdgYN9RSyYqCfkPZM7npGTTYnONrXjFbA";
 
     public static void main(String[] args) {
         if (args.length < 1 || args.length > 2 || args[0] == null) {
