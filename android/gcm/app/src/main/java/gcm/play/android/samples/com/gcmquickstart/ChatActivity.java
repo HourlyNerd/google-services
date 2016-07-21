@@ -46,8 +46,6 @@ public class ChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
-        context.runo
-
         currentMessage  = (EditText)findViewById(R.id.current_message_edittext);
         sendButton = (ImageButton) findViewById(R.id.send_message_button);
         messagesListView = (ListView) findViewById(R.id.chat_listview);

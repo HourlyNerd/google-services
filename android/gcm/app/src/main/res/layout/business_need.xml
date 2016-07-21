@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusableInTouchMode="true"
+    android:background="@color/white"
+    android:id="@+id/business_layout">
+
+    <!--<TextView android:id="@+id/prompt_text_view"-->
+        <!--android:layout_height="0dp"-->
+        <!--android:layout_weight="0.5"-->
+        <!--android:layout_width="300dp">-->
+    <!--</TextView>-->
+
+    <EditText android:id="@+id/need_edit_view"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:hint="What's on your mind?"
+        android:layout_width="match_parent">
+    </EditText>
+
+    <Button android:id="@+id/submit_button"
+        android:layout_height="45dp"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="15dp"
+        android:background="@color/black">
+    </Button>
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/footer_bar"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="0dp"
+        android:layout_margin="0dp"
+        android:background="@color/black">
+        <LinearLayout
+            android:layout_marginTop="4dp"
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:layout_height="60dp"
+            android:background="@color/black">
+            <ImageButton
+                android:paddingTop="5dp"
+                android:background="@color/black"
+                android:layout_height="35dp"
+                android:layout_width="35dp"
+                android:scaleType="fitXY"
+                android:layout_gravity="center_horizontal|top"
+                android:id="@+id/imageButton1"
+                android:src="@drawable/house"></ImageButton>
+            <View android:layout_weight="1"
+                android:layout_height="0dp"
+                android:layout_width="0dp"></View>
+            <TextView
+                android:background="#000000"
+                android:textSize="15sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|bottom"
+                android:gravity="center"
+                android:clickable="false"
+                android:textAlignment="center"
+                android:text="Home" ></TextView>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_marginTop="4dp"
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:layout_height="60dp"
+            android:background="@color/black">
+            <ImageButton
+                android:paddingTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:background="@color/black"
+                android:layout_height="35dp"
+                android:layout_width="35dp"
+                android:scaleType="fitXY"
+                android:layout_gravity="center_horizontal|top"
+                android:id="@+id/imageButton2"
+                android:src="@drawable/phone"></ImageButton>
+            <View android:layout_weight="1"
+                android:layout_height="0dp"
+                android:layout_width="0dp"></View>
+            <TextView
+                android:background="#000000"
+                android:textSize="15sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_gravity="center_horizontal|bottom"
+                android:clickable="false"
+                android:textAlignment="center"
+                android:text="Calls" ></TextView>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_marginTop="4dp"
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="60dp"
+            android:background="@color/black">
+            <ImageButton
+                android:paddingTop="5dp"
+                android:background="@color/black"
+                android:layout_height="30dp"
+                android:layout_width="40dp"
+                android:scaleType="fitXY"
+                android:layout_gravity="center_horizontal|top"
+                android:id="@+id/imageButton3"
+                android:src="@drawable/envelop"></ImageButton>
+            <View android:layout_weight="1"
+                android:layout_height="0dp"
+                android:layout_width="0dp"></View>
+            <TextView
+                android:background="#000000"
+                android:textSize="15sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|bottom"
+                android:gravity="center"
+                android:clickable="false"
+                android:textAlignment="center"
+                android:text="Message" ></TextView>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_marginTop="4dp"
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:layout_height="60dp"
+            android:background="@color/black">
+            <ImageButton
+                android:paddingTop="5dp"
+                android:background="@color/black"
+                android:layout_height="35dp"
+                android:layout_width="30dp"
+                android:scaleType="fitXY"
+                android:layout_gravity="center_horizontal|top"
+                android:id="@+id/imageButton4"
+                android:src="@drawable/magnifying_glass"></ImageButton>
+            <View android:layout_weight="1"
+                android:layout_height="0dp"
+                android:layout_width="0dp"></View>
+            <TextView
+                android:background="#000000"
+                android:textSize="15sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_gravity="center_horizontal|bottom"
+                android:clickable="false"
+                android:textAlignment="center"
+                android:text="People" ></TextView>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_marginTop="4dp"
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:layout_height="60dp"
+            android:background="@color/black">
+            <ImageButton
+                android:paddingTop="5dp"
+                android:background="@color/black"
+                android:layout_height="35dp"
+                android:layout_width="32dp"
+                android:scaleType="fitXY"
+                android:layout_gravity="center_horizontal|top"
+                android:id="@+id/imageButton5"
+                android:src="@drawable/gear"></ImageButton>
+            <View android:layout_weight="1"
+                android:layout_height="0dp"
+                android:layout_width="0dp"></View>
+            <TextView
+                android:background="#000000"
+                android:textSize="15sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:gravity="center"
+                android:layout_gravity="center_horizontal|bottom"
+                android:clickable="false"
+                android:text="Settings"></TextView>
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>
