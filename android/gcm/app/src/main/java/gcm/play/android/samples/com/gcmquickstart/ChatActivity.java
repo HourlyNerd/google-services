@@ -79,6 +79,7 @@ public class ChatActivity extends AppCompatActivity {
         chatMessage.chatMessage = msg;
         chatMessages.add(chatMessage);
         adapter.notifyDataSetChanged();
+        messagesListView.smoothScrollToPosition(adapter.getCount()-1);
     }
 
 }
