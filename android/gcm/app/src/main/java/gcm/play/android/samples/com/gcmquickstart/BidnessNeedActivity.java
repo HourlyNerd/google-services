@@ -1,6 +1,7 @@
 package gcm.play.android.samples.com.gcmquickstart;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -45,7 +46,8 @@ public class BidnessNeedActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String currentMsg = businessNeed.getText().toString();
-                MyGcmSenderService.sendMessage(currentMsg);
+                new AsyncGcmSender().execute(currentMsg);
+                startActivity(new Intent(BidnessNeedActivity.this, WaitingForChatActivity.class));
             }
         });
 
