@@ -20,6 +20,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -28,7 +29,15 @@ import android.util.Log;
 
 import com.google.android.gms.gcm.GcmListenerService;
 
+import java.util.Map;
+
 public class MyGcmListenerService extends GcmListenerService {
+
+    public static final String NEW_MESSAGE_BROADCAST = "NEW_MSG_BROADCAST";
+
+    // ohhh god the hackery - move this to its own class to encapsulate this shit
+    public static final String SHARED_PREFS_MSGS = "chatMessages";
+    public static final String SHARED_PREFS_SENDERS = "chatParticipants";
 
     private static final String TAG = "MyGcmListenerService";
 
@@ -53,6 +62,31 @@ public class MyGcmListenerService extends GcmListenerService {
             // normal downstream message.
         }
 
+        /*
+        // Soooooo we should really store this in a local DB but this is just hack day bitches!!
+        // you're lucky we're even persisting shit at all!
+        // anyway this is really hacky.
+        SharedPreferences chatMessages = getSharedPreferences(SHARED_PREFS_MSGS, Context.MODE_PRIVATE);
+        SharedPreferences chatParticipants = getSharedPreferences(SHARED_PREFS_SENDERS, Context.MODE_PRIVATE);
+
+        int numChatMessages = chatMessages.getAll().size();
+        int numChatParticipants = chatParticipants.getAll().size();
+        if (numChatMessages != numChatParticipants) {
+            /// ohhhhhhh shit
+            throw new RuntimeException("ooohhh shit this hacky sharedprefs thing broke");
+        }
+
+        // keys are sequential ints
+        chatMessages.edit().putString(Integer.toString(numChatMessages), message).apply();
+        chatParticipants.edit().putString(Integer.toString(numChatParticipants), from).apply();
+        */
+
+        addMessageToStorage(this, message, from);
+
+        Intent broadcast = new Intent();
+        broadcast.setAction(NEW_MESSAGE_BROADCAST);
+        sendBroadcast(broadcast);
+
         // [START_EXCLUDE]
         /**
          * Production applications would usually process the message here.
@@ -68,9 +102,28 @@ public class MyGcmListenerService extends GcmListenerService {
         if(null == sender || !sender.equals(UserConsts.CURRENT_USER)) {
             sendNotification(message);
         }
-        // [END_EXCLUDE]
     }
     // [END receive_message]
+
+    // dear god this shouldn't be static or live here
+    public static void addMessageToStorage(Context context, String msg, String from) {
+        // Soooooo we should really store this in a local DB but this is just hack day bitches!!
+        // you're lucky we're even persisting shit at all!
+        // anyway this is really hacky.
+        SharedPreferences chatMessages = context.getSharedPreferences(SHARED_PREFS_MSGS, Context.MODE_PRIVATE);
+        SharedPreferences chatParticipants = context.getSharedPreferences(SHARED_PREFS_SENDERS, Context.MODE_PRIVATE);
+
+        int numChatMessages = chatMessages.getAll().size();
+        int numChatParticipants = chatParticipants.getAll().size();
+        if (numChatMessages != numChatParticipants) {
+            /// ohhhhhhh shit
+            throw new RuntimeException("ooohhh shit this hacky sharedprefs thing broke");
+        }
+
+        // keys are sequential ints
+        chatMessages.edit().putString(Integer.toString(numChatMessages), msg).apply();
+        chatParticipants.edit().putString(Integer.toString(numChatParticipants), from).apply();
+    }
 
     /**
      * Create and show a simple notification containing the received GCM message.
