@@ -45,7 +45,7 @@ public class BidnessNeedActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String currentMsg = businessNeed.getText().toString();
-                //TODO: send to the google chat service
+                MyGcmSenderService.sendMessage(currentMsg);
             }
         });
 

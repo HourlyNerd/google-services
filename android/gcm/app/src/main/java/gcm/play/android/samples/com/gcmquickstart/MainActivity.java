@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // TODO just for testing
-        startActivity(new Intent(this, BidnessNeedActivity.class));
+        startActivity(new Intent(this, ChatActivity.class));
     }
 
     @Override

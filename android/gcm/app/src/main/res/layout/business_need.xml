@@ -16,7 +16,8 @@
     <EditText android:id="@+id/need_edit_view"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:hint="Type what's on your mind"
+        android:gravity="center"
+        android:hint="What's on your mind?"
         android:layout_width="match_parent">
     </EditText>
 
