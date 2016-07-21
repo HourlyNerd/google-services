@@ -5,6 +5,8 @@
     <!-- [START gcm_permission] -->
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <!-- [END gcm_permission] -->
 
     <application
@@ -24,6 +26,11 @@
 
         <activity android:name=".ChatActivity"
             android:label="Mark Roper" />
+
+        <activity android:name=".WaitingForChatActivity"
+            android:label="   Chatalant"
+            android:icon="@drawable/ct_logo"
+            android:windowSoftInputMode="adjustResize"/>
 
         <activity android:name=".BidnessNeedActivity"
             android:label="   Describe your need"
