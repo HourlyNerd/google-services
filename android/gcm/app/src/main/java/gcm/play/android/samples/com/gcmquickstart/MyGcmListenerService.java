@@ -65,7 +65,7 @@ public class MyGcmListenerService extends GcmListenerService {
          * In some cases it may be useful to show a notification indicating to the user
          * that a message was received.
          */
-        if(null != sender && !sender.equals(UserConsts.CURRENT_USER)) {
+        if(null == sender || !sender.equals(UserConsts.CURRENT_USER)) {
             sendNotification(message);
         }
         // [END_EXCLUDE]
