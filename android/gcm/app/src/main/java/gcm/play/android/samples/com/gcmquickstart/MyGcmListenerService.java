@@ -62,27 +62,10 @@ public class MyGcmListenerService extends GcmListenerService {
             // normal downstream message.
         }
 
-        /*
-        // Soooooo we should really store this in a local DB but this is just hack day bitches!!
-        // you're lucky we're even persisting shit at all!
-        // anyway this is really hacky.
-        SharedPreferences chatMessages = getSharedPreferences(SHARED_PREFS_MSGS, Context.MODE_PRIVATE);
-        SharedPreferences chatParticipants = getSharedPreferences(SHARED_PREFS_SENDERS, Context.MODE_PRIVATE);
-
-        int numChatMessages = chatMessages.getAll().size();
-        int numChatParticipants = chatParticipants.getAll().size();
-        if (numChatMessages != numChatParticipants) {
-            /// ohhhhhhh shit
-            throw new RuntimeException("ooohhh shit this hacky sharedprefs thing broke");
-        }
-
-        // keys are sequential ints
-        chatMessages.edit().putString(Integer.toString(numChatMessages), message).apply();
-        chatParticipants.edit().putString(Integer.toString(numChatParticipants), from).apply();
-        */
-
+        // add message to local persistent storage
         addMessageToStorage(this, message, from);
 
+        // let any running apps know that this data has changed
         Intent broadcast = new Intent();
         broadcast.setAction(NEW_MESSAGE_BROADCAST);
         sendBroadcast(broadcast);

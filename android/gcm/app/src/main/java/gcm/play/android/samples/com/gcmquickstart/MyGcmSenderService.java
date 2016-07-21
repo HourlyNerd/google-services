@@ -21,12 +21,16 @@ public class MyGcmSenderService {
     public static final String API_KEY = "AIzaSyDdgYN9RSyYqCfkPZM7npGTTYnONrXjFbA";
 
     public static void sendMessage(String message) {
+        sendMessage(message, UserConsts.CURRENT_USER);
+    }
+
+    public static void sendMessage(String message, String sender) {
         try {
             // Prepare JSON containing the GCM message content. What to send and where to send.
             JSONObject jGcmData = new JSONObject();
             JSONObject jData = new JSONObject();
             jData.put("message", message);
-            jData.put("sender", UserConsts.CURRENT_USER);
+            jData.put("sender", sender);
             // Where to send GCM message.
             jGcmData.put("to", "/topics/global");
             // What to send in GCM message.
