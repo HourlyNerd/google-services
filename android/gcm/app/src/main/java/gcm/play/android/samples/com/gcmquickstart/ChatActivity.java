@@ -17,7 +17,6 @@ import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -33,7 +32,6 @@ public class ChatActivity extends AppCompatActivity {
     private BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Toast.makeText(getApplicationContext(), "ANON RECEIVER GOT BROADCAST", Toast.LENGTH_SHORT).show();
             loadUnshownMessagesAndScroll();
         }
     };
