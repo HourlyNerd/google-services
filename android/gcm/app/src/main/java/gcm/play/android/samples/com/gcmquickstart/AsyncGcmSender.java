@@ -56,13 +56,6 @@ public class AsyncGcmSender extends AsyncTask<String, Void, String> {
                         "API key, and that the device's registration token is correct (if specified).");
             }
         }
-        for (int i = 0; i < 5; i++) {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                Thread.interrupted();
-            }
-        }
         return "Executed";
     }
 
