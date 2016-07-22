@@ -17,7 +17,12 @@
         android:layout_height="wrap_content"
         android:textColor="@color/black"
         android:background="@drawable/rounded_bg"
-        android:padding="5dp"
+        android:paddingStart="25dp"
+        android:paddingEnd="25dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
         android:layout_margin="5dp"
         />
 

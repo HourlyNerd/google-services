@@ -171,7 +171,12 @@ public class ChatActivity extends AppCompatActivity {
 
     // save the message, then add it to the local view
     private void displayAndSaveCurrentUserMessage(String msg) {
-        MyGcmListenerService.addMessageToStorage(this, msg, "ME");
+        String username = UserManager.getUserName(this);
+        if (username == null) {
+            Log.e("CATALANT", "This seems like a bug. we need real username but just using jordan");
+            username = "jordan";
+        }
+        MyGcmListenerService.addMessageToStorage(this, msg, username);
         updateReadMessageCount();
         displayMessage(msg, MessageType.SENT_BY_ME);
     }

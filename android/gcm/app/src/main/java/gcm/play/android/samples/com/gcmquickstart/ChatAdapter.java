@@ -67,17 +67,14 @@ public class ChatAdapter extends BaseAdapter {
             // my message - left align
             vg.setGravity(Gravity.CENTER_VERTICAL | Gravity.START);
 
-            lefthandIcon.setImageDrawable(context.getDrawable(R.drawable.jordan));
+            lefthandIcon.setImageDrawable(context.getDrawable(R.drawable.jordan_round));
 
             lefthandIcon.setVisibility(View.VISIBLE);
             righthandIcon.setVisibility(View.GONE);
-//            text.setGravity(Gravity.CENTER_VERTICAL | Gravity.START);
-//            icon.setImageDrawable();
         } else {
             vg.setGravity(Gravity.CENTER_VERTICAL | Gravity.END);
-//            text.setGravity(Gravity.CENTER_VERTICAL | Gravity.END);
 
-            righthandIcon.setImageDrawable(context.getDrawable(R.drawable.mark));
+            righthandIcon.setImageDrawable(context.getDrawable(R.drawable.mark_round));
 
             lefthandIcon.setVisibility(View.GONE);
             righthandIcon.setVisibility(View.VISIBLE);

@@ -6,6 +6,7 @@ import android.content.res.Configuration;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.v4.content.res.ResourcesCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -33,9 +34,12 @@ public class BidnessNeedActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.business_need);
-        getSupportActionBar().setDisplayUseLogoEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setIcon(R.drawable.ct_logo);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayUseLogoEnabled(true);
+            actionBar.setDisplayShowHomeEnabled(true);
+            actionBar.setIcon(R.drawable.ct_logo);
+        }
 
         int orange = ResourcesCompat.getColor(getResources(), R.color.orange, null);
         businessNeed = (EditText)findViewById(R.id.need_edit_view);
@@ -50,6 +54,10 @@ public class BidnessNeedActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String currentMsg = businessNeed.getText().toString();
+                // store locally because we ignore this message when push notifications come in
+                String username = UserManager.getUserName(BidnessNeedActivity.this);
+                MyGcmListenerService.addMessageToStorage(BidnessNeedActivity.this, currentMsg, username);
+
                 new AsyncGcmSender().execute(currentMsg, UserManager.getUserName(BidnessNeedActivity.this));
                 startActivity(new Intent(BidnessNeedActivity.this, WaitingForChatActivity.class));
             }
