@@ -65,17 +65,33 @@ public class ChatActivity extends AppCompatActivity {
         sendButton.setOnClickListener(new View.OnClickListener() {
                                           @Override
                                           public void onClick(View view) {
-                                              String currentMsg = currentMessage.getText().toString();
-                                              currentMessage.setText("");
-
-                                              displayAndSaveCurrentUserMessage(currentMsg);
-                                              adapter.notifyDataSetChanged();
-                                              scrollToBottomOfChat();
+                                              onSendClicked();
                                           }
                                       });
 
         loadMessages();
     }
+
+    private void onSendClicked() {
+        String currentMsg = currentMessage.getText().toString();
+        currentMessage.setText("");
+
+        // TODO should acknowledge the difference here between locally-added notifications
+        // and ones that have definitely reached the server and come back...
+        // we could show the message in grey until we receive (the same) message back
+        // as a push notification, in which case it turns black
+        String user = getUser();
+        new AsyncGcmSender().execute(currentMsg, user);
+
+        displayAndSaveCurrentUserMessage(currentMsg);
+        adapter.notifyDataSetChanged();
+        scrollToBottomOfChat();
+    }
+
+    private String getUser() {
+        return UserManager.getUserName(this);
+    }
+
 
     @Override
     public void onResume() {

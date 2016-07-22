@@ -29,8 +29,6 @@ import android.util.Log;
 
 import com.google.android.gms.gcm.GcmListenerService;
 
-import java.util.Map;
-
 public class MyGcmListenerService extends GcmListenerService {
 
     public static final String NEW_MESSAGE_BROADCAST = "NEW_MSG_BROADCAST";
@@ -39,7 +37,7 @@ public class MyGcmListenerService extends GcmListenerService {
     public static final String SHARED_PREFS_MSGS = "chatMessages";
     public static final String SHARED_PREFS_SENDERS = "chatParticipants";
 
-    private static final String TAG = "MyGcmListenerService";
+    private static final String TAG = "CATALANT";
 
     /**
      * Called when message is received.
@@ -54,52 +52,46 @@ public class MyGcmListenerService extends GcmListenerService {
         String message = data.getString("message");
         String sender = data.getString("sender");
         Log.d(TAG, "From: " + from);
+        Log.d(TAG, "Real (Sender) From: " + sender);
         Log.d(TAG, "Message: " + message);
 
-        if (from.startsWith("/topics/")) {
-            // message received from some topic.
+        String thisUser = UserManager.getUserName(this);
+        if (thisUser == null) { thisUser = UserConsts.DEFAULT_USER; }
+
+        if (thisUser.equals(sender)) {
+            Log.d(TAG, "Current user " + thisUser + " received message from self... ignoring.");
         } else {
-            // normal downstream message.
+            Log.d(TAG, "Current user " + thisUser + " got message from " + sender + ", processing it.");
         }
 
-        /*
-        // Soooooo we should really store this in a local DB but this is just hack day bitches!!
-        // you're lucky we're even persisting shit at all!
-        // anyway this is really hacky.
-        SharedPreferences chatMessages = getSharedPreferences(SHARED_PREFS_MSGS, Context.MODE_PRIVATE);
-        SharedPreferences chatParticipants = getSharedPreferences(SHARED_PREFS_SENDERS, Context.MODE_PRIVATE);
+        if(null == sender || // for backwards compatibility, could remove sometime
+                !sender.equals(thisUser)) /* ignore messages we sent to ourselves via our awesome broadcast architecture */ {
 
-        int numChatMessages = chatMessages.getAll().size();
-        int numChatParticipants = chatParticipants.getAll().size();
-        if (numChatMessages != numChatParticipants) {
-            /// ohhhhhhh shit
-            throw new RuntimeException("ooohhh shit this hacky sharedprefs thing broke");
-        }
+            if (from.startsWith("/topics/")) {
+                // message received from some topic.
+            } else {
+                // normal downstream message.
+            }
 
-        // keys are sequential ints
-        chatMessages.edit().putString(Integer.toString(numChatMessages), message).apply();
-        chatParticipants.edit().putString(Integer.toString(numChatParticipants), from).apply();
-        */
+            // add message to local persistent storage
+            addMessageToStorage(this, message, from);
 
-        addMessageToStorage(this, message, from);
+            // let any running apps know that this data has changed
+            Intent broadcast = new Intent();
+            broadcast.setAction(NEW_MESSAGE_BROADCAST);
+            sendBroadcast(broadcast);
 
-        Intent broadcast = new Intent();
-        broadcast.setAction(NEW_MESSAGE_BROADCAST);
-        sendBroadcast(broadcast);
+            // [START_EXCLUDE]
+            /**
+             * Production applications would usually process the message here.
+             * Eg: - Syncing with server.
+             *     - Store message in local database.
+             *     - Update UI.
+             *
+             * In some cases it may be useful to show a notification indicating to the user
+             * that a message was received.
+             */
 
-        // [START_EXCLUDE]
-        /**
-         * Production applications would usually process the message here.
-         * Eg: - Syncing with server.
-         *     - Store message in local database.
-         *     - Update UI.
-         */
-
-        /**
-         * In some cases it may be useful to show a notification indicating to the user
-         * that a message was received.
-         */
-        if(null == sender || !sender.equals(UserConsts.CURRENT_USER)) {
             sendNotification(message);
         }
     }
