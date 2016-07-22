@@ -27,6 +27,7 @@ public class BidnessNeedActivity extends AppCompatActivity {
     private LinearLayout footerBar;
     private LinearLayout businessLayout;
     private int height = 0;
+    //TODO: HACK
     private int deviceHeight = 1500;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +43,6 @@ public class BidnessNeedActivity extends AppCompatActivity {
         submitButton = (Button)findViewById(R.id.submit_button);
         footerBar = (LinearLayout)findViewById(R.id.footer_bar);
         businessLayout = (LinearLayout)findViewById(R.id.business_layout);
-
         submitButton.setText("submit");
         Log.i("CHATALANT", "Bidness activity built. Takin' care of bidness.");
 
