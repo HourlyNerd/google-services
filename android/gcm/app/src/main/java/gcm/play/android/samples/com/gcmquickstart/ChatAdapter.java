@@ -11,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,22 +50,46 @@ public class ChatAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup viewGroup) {
 //        View vi = convertView;
-        View vi = null;
-        if (vi == null) {
-            vi = inflater.inflate(R.layout.listview_item, null);
-        }
-
-        if (!(vi instanceof LinearLayout)) {
-            throw new RuntimeException("Hacky hack day! Row root must be a linear layout");
-        }
-        LinearLayout vg = (LinearLayout) vi;
+//        View vi = null;
+//        if (vi == null) {
+//        }
 
         ChatMessage message = data.get(position);
 
+        View vi;
         if (message.action != null) {
             // special action time!
+            vi = inflater.inflate(R.layout.listview_project_proposed, null);
+            if (!(vi instanceof LinearLayout)) {
+                throw new RuntimeException("Hacky hack day! Row root must be a linear layout");
+            }
+            LinearLayout vg = (LinearLayout) vi;
+
+//            vg.setBackground(context.getDrawable(R.drawable.rounded_bg_dark_grey));
+            LinearLayout cardView = (LinearLayout)vg.findViewById(R.id.inner_view_with_bg);
+            cardView.setBackground(context.getDrawable(R.drawable.rounded_bg_dark_grey));
+
+            TextView header = (TextView)vg.findViewById(R.id.message_header);
+            TextView body = (TextView)vg.findViewById(R.id.message_textview);
+            ImageView icon = (ImageView)vg.findViewById(R.id.top_user_icon_imageview);
+
+            String username = UserManager.getUserName(context);
+            String otherName = username.equals("jordan") ? "Mark Roper" : "Jordan Winch";
+            header.setText("Launch a project with " + otherName + "?");
+            header.setTextColor(context.getColor(R.color.white));
+            body.setText("We'll only start a project if you both say yes.");
+            body.setTextColor(context.getColor(R.color.white));
+            icon.setImageDrawable(getIconDrawable(message.sender));
+
+            // do stuff here for the proposed project listview view
 
         } else {
+            vi = inflater.inflate(R.layout.listview_item, null);
+            if (!(vi instanceof LinearLayout)) {
+                throw new RuntimeException("Hacky hack day! Row root must be a linear layout");
+            }
+            LinearLayout vg = (LinearLayout) vi;
+
             // pretty much a normal chat message
             TextView text = (TextView) vg.findViewById(R.id.message_textview);
             // hacky - should be the same (not on hackday tho)
@@ -102,6 +128,10 @@ public class ChatAdapter extends BaseAdapter {
         }
 
         return vi;
+    }
+
+    private Drawable getIconDrawable(String iconForThisUsername) {
+        return context.getDrawable(iconForThisUsername.equals("jordan") ? R.drawable.jordan_round : R.drawable.mark_round);
     }
 
     private int getPixelsFromDp(int dp) {
