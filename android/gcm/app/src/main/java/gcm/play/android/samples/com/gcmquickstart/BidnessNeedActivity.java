@@ -47,6 +47,9 @@ public class BidnessNeedActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String currentMsg = businessNeed.getText().toString();
                 new AsyncGcmSender().execute(currentMsg);
+                //
+                String username = UserManager.getUserName(BidnessNeedActivity.this);
+                MyGcmListenerService.addMessageToStorage(BidnessNeedActivity.this, currentMsg, username);
                 startActivity(new Intent(BidnessNeedActivity.this, WaitingForChatActivity.class));
             }
         });
