@@ -66,14 +66,22 @@ public class ChatAdapter extends BaseAdapter {
             // my message - left align
             vg.setGravity(Gravity.CENTER_VERTICAL | Gravity.START);
 
-            lefthandIcon.setImageDrawable(context.getDrawable(R.drawable.jordan_round));
+            if (UserManager.getUserName(context).equals("jordan")) {
+                lefthandIcon.setImageDrawable(context.getDrawable(R.drawable.jordan_round));
+            } else if (UserManager.getUserName(context).equals("mark")) {
+                lefthandIcon.setImageDrawable(context.getDrawable(R.drawable.mark_round));
+            }
 
             lefthandIcon.setVisibility(View.VISIBLE);
             righthandIcon.setVisibility(View.GONE);
         } else {
             vg.setGravity(Gravity.CENTER_VERTICAL | Gravity.END);
 
-            righthandIcon.setImageDrawable(context.getDrawable(R.drawable.mark_round));
+            if (UserManager.getUserName(context).equals("jordan")) {
+                righthandIcon.setImageDrawable(context.getDrawable(R.drawable.jordan_round));
+            } else if (UserManager.getUserName(context).equals("mark")) {
+                righthandIcon.setImageDrawable(context.getDrawable(R.drawable.mark_round));
+            }
 
             lefthandIcon.setVisibility(View.GONE);
             righthandIcon.setVisibility(View.VISIBLE);
