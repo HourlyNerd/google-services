@@ -5,7 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -49,12 +52,15 @@ public class ChatActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setIcon(R.drawable.ct_logo);
 
+        int colorARGB = ResourcesCompat.getColor(getResources(), R.color.orange, null);
+        Drawable sendIcon = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_send_white_48dp, null);
+        sendIcon.setColorFilter(colorARGB, PorterDuff.Mode.SRC_ATOP);
+
         currentMessage  = (EditText)findViewById(R.id.current_message_edittext);
         sendButton = (ImageButton) findViewById(R.id.send_message_button);
         messagesListView = (ListView) findViewById(R.id.chat_listview);
 
         currentMessage.setHint("type here to chat...");
-//        currentMessage.setTextColor(getColor(R.color.white));
 
         adapter = new ChatAdapter(this, chatMessages);
         messagesListView.setAdapter(adapter);
