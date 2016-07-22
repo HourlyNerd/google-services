@@ -20,7 +20,6 @@ public class ChatAdapter extends BaseAdapter {
 
     private static LayoutInflater inflater = null;
     private Context context;
-//    String[] data;
     ArrayList<ChatMessage> data;
 
     public ChatAdapter(Context context, ArrayList<ChatMessage> data) {
