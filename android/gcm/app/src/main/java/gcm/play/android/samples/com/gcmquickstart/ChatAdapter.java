@@ -77,11 +77,11 @@ public class ChatAdapter extends BaseAdapter {
             vg.setGravity(Gravity.CENTER_VERTICAL | Gravity.START);
             lefthandIcon.setImageDrawable(icon);
             lefthandIcon.setVisibility(View.VISIBLE);
-            righthandIcon.setVisibility(View.GONE);
+            righthandIcon.setVisibility(View.INVISIBLE);
         } else {
             vg.setGravity(Gravity.CENTER_VERTICAL | Gravity.END);
             righthandIcon.setImageDrawable(icon);
-            lefthandIcon.setVisibility(View.GONE);
+            lefthandIcon.setVisibility(View.INVISIBLE);
             righthandIcon.setVisibility(View.VISIBLE);
         }
 

@@ -26,7 +26,7 @@
         </activity>
 
         <activity android:name=".ChatActivity"
-            android:label="   Chat with Mark Roper"
+            android:label="Chat"
             android:icon="@drawable/ct_logo"/>
 
         <activity android:name=".WaitingForChatActivity"

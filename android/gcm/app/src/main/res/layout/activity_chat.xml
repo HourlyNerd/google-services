@@ -20,7 +20,10 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:paddingTop="5dp"
-        android:layout_height="60dp"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:paddingBottom="10dp"
+        android:layout_height="80dp"
         android:background="@color/white">
     
         <EditText

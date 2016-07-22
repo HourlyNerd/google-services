@@ -45,10 +45,15 @@ public class ChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         ActionBar actionBar = getSupportActionBar();
+        // begin hackery
+        // if you're not you then you're me
+        String titleString = "Chat with " + (UserManager.getUserName(this).equals("jordan") ? "Mark Roper" : "Jordan Winch");
+        // end hackery
         if (actionBar != null) {
             actionBar.setDisplayUseLogoEnabled(true);
             actionBar.setDisplayShowHomeEnabled(true);
             actionBar.setIcon(R.drawable.ct_logo);
+            actionBar.setTitle("   " + titleString);
         }
         int orange = ResourcesCompat.getColor(getResources(), R.color.orange, null);
         Drawable sendIcon = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_send_white_48dp, null);
@@ -190,15 +195,6 @@ public class ChatActivity extends AppCompatActivity {
 
         chatMessage.chatMessage = msg;
         chatMessage.sender = sender;
-//        String username = UserManager.getUserName(this);
-//        if (sender != null && sender.equals(username)) {
-//            chatMessage.messageType = MessageType.SENT_BY_ME;
-//        } else if (sender != null) {
-//            chatMessage.messageType = MessageType.SENT_BY_OTHER;
-//        } else {
-//            // umm warn or something?
-//            chatMessage.messageType = MessageType.SENT_BY_OTHER;
-//        }
         chatMessages.add(chatMessage);
     }
 
