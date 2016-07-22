@@ -51,23 +51,17 @@ public class ChatActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayUseLogoEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setIcon(R.drawable.ct_logo);
-
-        int colorARGB = ResourcesCompat.getColor(getResources(), R.color.orange, null);
+        int orange = ResourcesCompat.getColor(getResources(), R.color.orange, null);
         Drawable sendIcon = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_send_white_48dp, null);
-        sendIcon.setColorFilter(colorARGB, PorterDuff.Mode.SRC_ATOP);
-
+        sendIcon.setColorFilter(orange, PorterDuff.Mode.SRC_ATOP);
         currentMessage  = (EditText)findViewById(R.id.current_message_edittext);
-        sendButton = (ImageButton) findViewById(R.id.send_message_button);
-        messagesListView = (ListView) findViewById(R.id.chat_listview);
-
-        currentMessage.setHint("type here to chat...");
-
+        currentMessage.getBackground().setColorFilter(orange, PorterDuff.Mode.SRC_IN);
+        currentMessage.setHint("Type to chat...");
         adapter = new ChatAdapter(this, chatMessages);
+        messagesListView = (ListView) findViewById(R.id.chat_listview);
         messagesListView.setAdapter(adapter);
         messagesListView.setDivider(null);
-
-        Log.i("CHATALANT", "Chat activity built");
-
+        sendButton = (ImageButton) findViewById(R.id.send_message_button);
         sendButton.setOnClickListener(new View.OnClickListener() {
                                           @Override
                                           public void onClick(View view) {
