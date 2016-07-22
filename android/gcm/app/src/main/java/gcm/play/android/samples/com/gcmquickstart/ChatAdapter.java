@@ -1,6 +1,7 @@
 package gcm.play.android.samples.com.gcmquickstart;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -62,30 +63,28 @@ public class ChatAdapter extends BaseAdapter {
 
         ChatMessage message = data.get(position);
         text.setText(message.chatMessage);
-        if (message.messageType == MessageType.SENT_BY_ME) {
+
+        String msgSender = message.sender;
+        // TODO: should probably be replaced with slightly more robust user icon management
+        int iconId = msgSender.equals("jordan") ? R.drawable.jordan_round : R.drawable.mark_round;
+        Drawable icon = context.getDrawable(iconId);
+
+        String username = UserManager.getUserName(context);
+        MessageType messageType = username.equals(msgSender) ? MessageType.SENT_BY_ME : MessageType.SENT_BY_OTHER;
+
+        if (messageType == MessageType.SENT_BY_ME) {
             // my message - left align
             vg.setGravity(Gravity.CENTER_VERTICAL | Gravity.START);
-
-            if (UserManager.getUserName(context).equals("jordan")) {
-                lefthandIcon.setImageDrawable(context.getDrawable(R.drawable.jordan_round));
-            } else if (UserManager.getUserName(context).equals("mark")) {
-                lefthandIcon.setImageDrawable(context.getDrawable(R.drawable.mark_round));
-            }
-
+            lefthandIcon.setImageDrawable(icon);
             lefthandIcon.setVisibility(View.VISIBLE);
             righthandIcon.setVisibility(View.GONE);
         } else {
             vg.setGravity(Gravity.CENTER_VERTICAL | Gravity.END);
-
-            if (UserManager.getUserName(context).equals("jordan")) {
-                righthandIcon.setImageDrawable(context.getDrawable(R.drawable.jordan_round));
-            } else if (UserManager.getUserName(context).equals("mark")) {
-                righthandIcon.setImageDrawable(context.getDrawable(R.drawable.mark_round));
-            }
-
+            righthandIcon.setImageDrawable(icon);
             lefthandIcon.setVisibility(View.GONE);
             righthandIcon.setVisibility(View.VISIBLE);
         }
+
         return vi;
     }
 }

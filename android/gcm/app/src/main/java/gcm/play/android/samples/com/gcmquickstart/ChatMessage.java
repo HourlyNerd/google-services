@@ -6,7 +6,9 @@ package gcm.play.android.samples.com.gcmquickstart;
 public class ChatMessage {
 
     String chatMessage;
-    MessageType messageType;
+    String sender;
+    // do we still need message type? we can just check if sender == us
+//    MessageType messageType;
 
 }
 

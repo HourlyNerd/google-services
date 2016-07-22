@@ -82,8 +82,6 @@ public class ChatActivity extends AppCompatActivity {
         new AsyncGcmSender().execute(currentMsg, user);
 
         displayAndSaveCurrentUserMessage(currentMsg);
-        adapter.notifyDataSetChanged();
-        scrollToBottomOfChat();
     }
 
     private String getUser() {
@@ -100,7 +98,6 @@ public class ChatActivity extends AppCompatActivity {
 
         adapter.notifyDataSetChanged();
         scrollToBottomOfChat();
-
     }
 
     int highestIdOfMessageShown = 0;
@@ -168,30 +165,40 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     // save the message, then add it to the local view
+    // this method does call notifyDataSetChanged
     private void displayAndSaveCurrentUserMessage(String msg) {
         String username = UserManager.getUserName(this);
         MyGcmListenerService.addMessageToStorage(this, msg, username);
+
+        displayMessage(msg, username);
+
+        adapter.notifyDataSetChanged();
         updateReadMessageCount();
-        displayMessage(msg, MessageType.SENT_BY_ME);
+        scrollToBottomOfChat();
+
     }
 
+    // displays one message to the chat box. if the sender is the current user,
+    // it will receive special treatment
+    // this method does NOT call notifyDataSetChanged, and you should do this yourself
+    // after calling it. I'm not doing it for you in case you want to add a bunch of messages
+    // (such as when we first load a chat)
     private void displayMessage(String msg, String sender) {
-        String username = UserManager.getUserName(this);
-        if (sender != null && sender.equals(username)) {
-            displayMessage(msg, MessageType.SENT_BY_ME);
-        } else if (sender != null) {
-            displayMessage(msg, MessageType.SENT_BY_OTHER);
-        } else {
-            // umm warn or something?
-            displayMessage(msg, MessageType.SENT_BY_OTHER);
-        }
-    }
+        if (msg == null || msg.length() < 1) { return; }
 
-    private void displayMessage(String msg, MessageType messageType) {
-        if (msg == null || msg.length() < 1 || messageType == null) { return; }
         ChatMessage chatMessage = new ChatMessage();
-        chatMessage.messageType = messageType;
+
         chatMessage.chatMessage = msg;
+        chatMessage.sender = sender;
+//        String username = UserManager.getUserName(this);
+//        if (sender != null && sender.equals(username)) {
+//            chatMessage.messageType = MessageType.SENT_BY_ME;
+//        } else if (sender != null) {
+//            chatMessage.messageType = MessageType.SENT_BY_OTHER;
+//        } else {
+//            // umm warn or something?
+//            chatMessage.messageType = MessageType.SENT_BY_OTHER;
+//        }
         chatMessages.add(chatMessage);
     }
 
