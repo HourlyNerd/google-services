@@ -3,7 +3,9 @@ package gcm.play.android.samples.com.gcmquickstart;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -34,7 +36,9 @@ public class BidnessNeedActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setIcon(R.drawable.ct_logo);
 
+        int orange = ResourcesCompat.getColor(getResources(), R.color.orange, null);
         businessNeed = (EditText)findViewById(R.id.need_edit_view);
+        businessNeed.getBackground().setColorFilter(orange, PorterDuff.Mode.SRC_IN);
         submitButton = (Button)findViewById(R.id.submit_button);
         footerBar = (LinearLayout)findViewById(R.id.footer_bar);
         businessLayout = (LinearLayout)findViewById(R.id.business_layout);
@@ -46,7 +50,7 @@ public class BidnessNeedActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String currentMsg = businessNeed.getText().toString();
-                new AsyncGcmSender().execute(currentMsg);
+                new AsyncGcmSender().execute(currentMsg, UserManager.getUserName(BidnessNeedActivity.this));
                 startActivity(new Intent(BidnessNeedActivity.this, WaitingForChatActivity.class));
             }
         });

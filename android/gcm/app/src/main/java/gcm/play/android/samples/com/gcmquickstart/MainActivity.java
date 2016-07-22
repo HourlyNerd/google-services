@@ -110,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
             builder.create().show();
             Log.i("CATALANT", "Dialog shown (?)");
         } else {
-            startActivity(new Intent(this, ChatActivity.class));
+            startActivity(new Intent(this, BidnessNeedActivity.class));
         }
     }
 
