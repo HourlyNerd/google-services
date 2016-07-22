@@ -56,7 +56,6 @@ public class MyGcmListenerService extends GcmListenerService {
         Log.d(TAG, "Message: " + message);
 
         String thisUser = UserManager.getUserName(this);
-        if (thisUser == null) { thisUser = UserConsts.DEFAULT_USER; }
 
         if (thisUser.equals(sender)) {
             Log.d(TAG, "Current user " + thisUser + " received message from self... ignoring.");
