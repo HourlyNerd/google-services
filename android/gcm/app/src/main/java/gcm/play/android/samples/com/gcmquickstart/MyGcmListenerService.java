@@ -73,7 +73,7 @@ public class MyGcmListenerService extends GcmListenerService {
             }
 
             // add message to local persistent storage
-            addMessageToStorage(this, message, from);
+            addMessageToStorage(this, message, sender);
 
             // let any running apps know that this data has changed
             Intent broadcast = new Intent();
