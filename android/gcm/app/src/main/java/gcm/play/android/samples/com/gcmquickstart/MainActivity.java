@@ -40,7 +40,8 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     private BroadcastReceiver mRegistrationBroadcastReceiver;
     private boolean isReceiverRegistered;
-
+    private static final String MARK = "mark";
+    private static final String JORDAN = "jordan";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,14 +76,14 @@ public class MainActivity extends AppCompatActivity {
             builder.setPositiveButton("Business/Mark", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    UserManager.setUserName(MainActivity.this, "mark");
+                    UserManager.setUserName(MainActivity.this, MainActivity.MARK);
                     startActivityAfterDelay();
                 }
             });
             builder.setNegativeButton("Nerd/Jordan", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    UserManager.setUserName(MainActivity.this, "jordan");
+                    UserManager.setUserName(MainActivity.this, MainActivity.JORDAN);
                     startActivityAfterDelay();
                 }
             });
@@ -98,7 +99,11 @@ public class MainActivity extends AppCompatActivity {
         new android.os.Handler().postDelayed(
                 new Runnable() {
                     public void run() {
-                        startActivity(new Intent(MainActivity.this, BidnessNeedActivity.class));
+                        if(UserManager.getUserName(MainActivity.this).equals(MainActivity.MARK)) {
+                            startActivity(new Intent(MainActivity.this, BidnessNeedActivity.class));
+                        } else {
+                            startActivity(new Intent(MainActivity.this, ChatActivity.class));
+                        }
                     }
                 }, 1100);
     }
