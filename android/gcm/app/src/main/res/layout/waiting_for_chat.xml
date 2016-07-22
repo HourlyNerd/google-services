@@ -6,24 +6,42 @@
     android:background="@color/white"
     android:id="@+id/waiting_for_chat">
 
+    <View
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_width="match_parent"></View>
+
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:gravity="center_horizontal"
+        android:layout_height="100dp">
         <ImageView
+            android:id="@+id/loader_icon"
             android:src="@drawable/loader_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_width="65dp"
+            android:layout_gravity="center_vertical"
+            android:layout_height="65dp" />
         <TextView
+            android:layout_marginLeft="15dp"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:textSize="25sp"
-            android:text="Finding experts..."/>
+            android:gravity="center_vertical"
+            android:textSize="30sp"
+            android:textColor="@color/black"
+            android:text="Searching experts..."/>
     </LinearLayout>
     <TextView
         android:layout_width="match_parent"
-        android:padding="20dp"
-        android:layout_height="wrap_content"
+        android:padding="15dp"
+        android:layout_height="175dp"
+        android:gravity="center"
+        android:textSize="20sp"
         android:textColor="#B9B9B9"
-        android:text="We sent your need out to our pool of 27,000 experts. Someone will be with you shortly!"/>
+        android:text="We're finding the best person from our community of 27,000+ experts to chat with you right now. Someone will be with you shortly!"/>
+
+    <View
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_width="match_parent"></View>
 </LinearLayout>

@@ -45,6 +45,9 @@ public class ChatActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setIcon(R.drawable.ct_logo);
 
         currentMessage  = (EditText)findViewById(R.id.current_message_edittext);
         sendButton = (ImageButton) findViewById(R.id.send_message_button);
