@@ -28,6 +28,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Window;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -35,40 +36,22 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
 public class MainActivity extends AppCompatActivity {
-
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     private static final String TAG = "MainActivity";
-
     private BroadcastReceiver mRegistrationBroadcastReceiver;
-    private ProgressBar mRegistrationProgressBar;
-    private TextView mInformationTextView;
     private boolean isReceiverRegistered;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
-
-        mRegistrationProgressBar = (ProgressBar) findViewById(R.id.registrationProgressBar);
         mRegistrationBroadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                mRegistrationProgressBar.setVisibility(ProgressBar.GONE);
                 SharedPreferences sharedPreferences =
                         PreferenceManager.getDefaultSharedPreferences(context);
-                boolean sentToken = sharedPreferences
-                        .getBoolean(QuickstartPreferences.SENT_TOKEN_TO_SERVER, false);
-                if (sentToken) {
-                    mInformationTextView.setText(getString(R.string.gcm_send_message));
-                } else {
-                    mInformationTextView.setText(getString(R.string.token_error_message));
-                }
             }
         };
-        mInformationTextView = (TextView) findViewById(R.id.informationTextView);
-
         // Registering BroadcastReceiver
         registerReceiver();
 
@@ -77,9 +60,6 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this, RegistrationIntentService.class);
             startService(intent);
         }
-
-        // TODO just for testing
-//        startActivity(new Intent(this, BidnessNeedActivity.class));
     }
 
     @Override
@@ -96,24 +76,32 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                     UserManager.setUserName(MainActivity.this, "mark");
-                    startActivity(new Intent(MainActivity.this, ChatActivity.class));
+                    startActivityAfterDelay();
                 }
             });
             builder.setNegativeButton("Nerd/Jordan", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                     UserManager.setUserName(MainActivity.this, "jordan");
-                    startActivity(new Intent(MainActivity.this, ChatActivity.class));
+                    startActivityAfterDelay();
                 }
             });
             Log.i("CATALANT", "About to build dialog...");
             builder.create().show();
             Log.i("CATALANT", "Dialog shown (?)");
         } else {
-            startActivity(new Intent(this, BidnessNeedActivity.class));
+            startActivityAfterDelay();
         }
     }
 
+    public void startActivityAfterDelay() {
+        new android.os.Handler().postDelayed(
+                new Runnable() {
+                    public void run() {
+                        startActivity(new Intent(MainActivity.this, BidnessNeedActivity.class));
+                    }
+                }, 1100);
+    }
     @Override
     protected void onPause() {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mRegistrationBroadcastReceiver);
