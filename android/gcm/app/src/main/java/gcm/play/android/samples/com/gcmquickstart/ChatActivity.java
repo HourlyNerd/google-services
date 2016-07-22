@@ -8,12 +8,14 @@ import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -25,6 +27,10 @@ import java.util.Map;
  * Created by jordanwinch on 7/21/16.
  */
 public class ChatActivity extends AppCompatActivity {
+
+    public static final String ACTION_PROPOSE_PROJECT = "PROPOSE_PROJECT";
+    public static final String ACTION_ACCEPT_PROJECT = "ACCEPT_PROJECT";
+
     private EditText currentMessage;
     private ImageButton sendButton;
     private ListView messagesListView;
@@ -36,7 +42,6 @@ public class ChatActivity extends AppCompatActivity {
         }
     };
 
-    //DEFINING A STRING ADAPTER WHICH WILL HANDLE THE DATA OF THE LISTVIEW
     private BaseAdapter adapter;
     private ArrayList<ChatMessage> chatMessages = new ArrayList<>();
 
@@ -47,7 +52,12 @@ public class ChatActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         // begin hackery
         // if you're not you then you're me
-        String titleString = "Chat with " + (UserManager.getUserName(this).equals("jordan") ? "Mark Roper" : "Jordan Winch");
+        String username = UserManager.getUserName(this);
+        String me = username.equals("jordan") ? "Jordan Winch" : "Mark Roper";
+        String you = username.equals("jordan") ? "Mark Roper" : "Jordan Winch";
+        String yourType = username.equals("jordan") ? "Business" : "Expert";
+
+        String titleString = "Chat with " + you;
         // end hackery
         if (actionBar != null) {
             actionBar.setDisplayUseLogoEnabled(true);
@@ -60,7 +70,7 @@ public class ChatActivity extends AppCompatActivity {
         sendIcon.setColorFilter(orange, PorterDuff.Mode.SRC_ATOP);
         currentMessage  = (EditText)findViewById(R.id.current_message_edittext);
         currentMessage.getBackground().setColorFilter(orange, PorterDuff.Mode.SRC_IN);
-        currentMessage.setHint("Type to chat...");
+        currentMessage.setHint("Send message to " + yourType);
         adapter = new ChatAdapter(this, chatMessages);
         messagesListView = (ListView) findViewById(R.id.chat_listview);
         messagesListView.setAdapter(adapter);
@@ -72,6 +82,18 @@ public class ChatActivity extends AppCompatActivity {
                                               onSendClicked();
                                           }
                                       });
+
+        Button startProjectButton = (Button) findViewById(R.id.start_project_button);
+        startProjectButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String msg = "I'd like to work with you.";
+                String user = getUser();
+                new AsyncGcmSender().execute(msg, user, ACTION_PROPOSE_PROJECT);
+            }
+        });
+        startProjectButton.setText("Start a project with this " + yourType);
+
         loadMessages();
     }
 
@@ -84,7 +106,7 @@ public class ChatActivity extends AppCompatActivity {
         // we could show the message in grey until we receive (the same) message back
         // as a push notification, in which case it turns black
         String user = getUser();
-        new AsyncGcmSender().execute(currentMsg, user);
+        new AsyncGcmSender().execute(currentMsg, user, null);
 
         displayAndSaveCurrentUserMessage(currentMsg);
     }
@@ -110,17 +132,19 @@ public class ChatActivity extends AppCompatActivity {
     private void loadMessages() {
         SharedPreferences sharedPrefsMsgs = getSharedPreferences(MyGcmListenerService.SHARED_PREFS_MSGS, Context.MODE_PRIVATE);
         SharedPreferences sharedPrefsSenders = getSharedPreferences(MyGcmListenerService.SHARED_PREFS_SENDERS, Context.MODE_PRIVATE);
+        SharedPreferences sharedPrefsActions = getSharedPreferences(MyGcmListenerService.SHARED_PREFS_ACTIONS, Context.MODE_PRIVATE);
 
         Map<String, ?> allMsgs = sharedPrefsMsgs.getAll();
         Map<String, ?> allSenders = sharedPrefsSenders.getAll();
 
         for (int i = 0; i < allMsgs.size(); i++) {
             String index = Integer.valueOf(i).toString();
-            String sender = (String)allSenders.get(index);
-            String msg = (String)allMsgs.get(index);
+            String msg = sharedPrefsMsgs.getString(index, null);
+            String sender = sharedPrefsSenders.getString(index, null);
+            String action = sharedPrefsActions.getString(index, null);
 
-            Log.i("CATALANT", "loading message #" + index + "...");
-            displayMessage(msg, sender);
+            Log.i("CATALANT", "loading message #" + index + "..." + "(msg:" + msg + ", sender:" + sender + ", action:" + action + ")");
+            displayMessage(msg, sender, action);
         }
 
         updateReadMessageCount();
@@ -136,6 +160,7 @@ public class ChatActivity extends AppCompatActivity {
     private void loadUnshownMessagesAndScroll() {
         SharedPreferences sharedPrefsMsgs = getSharedPreferences(MyGcmListenerService.SHARED_PREFS_MSGS, Context.MODE_PRIVATE);
         SharedPreferences sharedPrefsSenders = getSharedPreferences(MyGcmListenerService.SHARED_PREFS_SENDERS, Context.MODE_PRIVATE);
+        SharedPreferences sharedPrefsActions = getSharedPreferences(MyGcmListenerService.SHARED_PREFS_ACTIONS, Context.MODE_PRIVATE);
 
         int highestExistingMessageId = sharedPrefsMsgs.getAll().size() - 1;
         Log.i("CATALANT", "I see a total of " + highestExistingMessageId + " messages in storage" );
@@ -155,8 +180,9 @@ public class ChatActivity extends AppCompatActivity {
             Log.i("CATALANT", "rendering message " + i);
             String message = sharedPrefsMsgs.getString(Integer.toString(i), null);
             String sender = sharedPrefsSenders.getString(Integer.toString(i), null);
+            String action = sharedPrefsActions.getString(Integer.toString(i), null);
 
-            displayMessage(message, sender);
+            displayMessage(message, sender, action);
         }
         adapter.notifyDataSetChanged();
         updateReadMessageCount();
@@ -173,9 +199,9 @@ public class ChatActivity extends AppCompatActivity {
     // this method does call notifyDataSetChanged
     private void displayAndSaveCurrentUserMessage(String msg) {
         String username = UserManager.getUserName(this);
-        MyGcmListenerService.addMessageToStorage(this, msg, username);
+        MyGcmListenerService.addMessageToStorage(this, msg, username, null);
 
-        displayMessage(msg, username);
+        displayMessage(msg, username, null);
 
         adapter.notifyDataSetChanged();
         updateReadMessageCount();
@@ -186,15 +212,15 @@ public class ChatActivity extends AppCompatActivity {
     // displays one message to the chat box. if the sender is the current user,
     // it will receive special treatment
     // this method does NOT call notifyDataSetChanged, and you should do this yourself
-    // after calling it. I'm not doing it for you in case you want to add a bunch of messages
-    // (such as when we first load a chat)
-    private void displayMessage(String msg, String sender) {
+    // after calling it. This way you can load a bunch of stored messages and only call it once
+    private void displayMessage(String msg, String sender, @Nullable String action) {
         if (msg == null || msg.length() < 1) { return; }
 
         ChatMessage chatMessage = new ChatMessage();
 
         chatMessage.chatMessage = msg;
         chatMessage.sender = sender;
+        chatMessage.action = action;
         chatMessages.add(chatMessage);
     }
 

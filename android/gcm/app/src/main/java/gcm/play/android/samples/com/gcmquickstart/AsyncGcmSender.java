@@ -24,12 +24,14 @@ public class AsyncGcmSender extends AsyncTask<String, Void, String> {
         if(params.length > 0) {
             String message = params[0];
             String user = params[1];
+            String action = params.length > 2 ? params[2] : null;
             try {
                 // Prepare JSON containing the GCM message content. What to send and where to send.
                 JSONObject jGcmData = new JSONObject();
                 JSONObject jData = new JSONObject();
                 jData.put("message", message);
                 jData.put("sender", user);
+                jData.put("action", action);
                 // Where to send GCM message.
                 jGcmData.put("to", "/topics/global");
                 // What to send in GCM message.

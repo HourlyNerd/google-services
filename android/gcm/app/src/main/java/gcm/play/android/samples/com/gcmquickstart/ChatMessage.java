@@ -7,8 +7,6 @@ public class ChatMessage {
 
     String chatMessage;
     String sender;
-    // do we still need message type? we can just check if sender == us
-//    MessageType messageType;
-
+    String action;
 }
 

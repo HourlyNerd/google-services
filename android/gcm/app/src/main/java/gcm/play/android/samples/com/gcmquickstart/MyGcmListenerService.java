@@ -24,6 +24,7 @@ import android.content.SharedPreferences;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
@@ -36,6 +37,7 @@ public class MyGcmListenerService extends GcmListenerService {
     // ohhh god the hackery - move this to its own class to encapsulate this shit
     public static final String SHARED_PREFS_MSGS = "chatMessages";
     public static final String SHARED_PREFS_SENDERS = "chatParticipants";
+    public static final String SHARED_PREFS_ACTIONS = "chatActions";
 
     private static final String TAG = "CATALANT";
 
@@ -51,9 +53,11 @@ public class MyGcmListenerService extends GcmListenerService {
     public void onMessageReceived(String from, Bundle data) {
         String message = data.getString("message");
         String sender = data.getString("sender");
+        String action = data.getString("action");
         Log.d(TAG, "From: " + from);
         Log.d(TAG, "Real (Sender) From: " + sender);
         Log.d(TAG, "Message: " + message);
+        Log.d(TAG, "Action: " + action);
 
         String thisUser = UserManager.getUserName(this);
 
@@ -73,7 +77,7 @@ public class MyGcmListenerService extends GcmListenerService {
             }
 
             // add message to local persistent storage
-            addMessageToStorage(this, message, sender);
+            addMessageToStorage(this, message, sender, action);
 
             // let any running apps know that this data has changed
             Intent broadcast = new Intent();
@@ -97,7 +101,7 @@ public class MyGcmListenerService extends GcmListenerService {
     // [END receive_message]
 
     // dear god this shouldn't be static or live here
-    public static void addMessageToStorage(Context context, String msg, String from) {
+    public static void addMessageToStorage(Context context, String msg, String from, @Nullable String action) {
         // Soooooo we should really store this in a local DB but this is just hack day bitches!!
         // you're lucky we're even persisting shit at all!
         // anyway this is really hacky.
@@ -106,6 +110,7 @@ public class MyGcmListenerService extends GcmListenerService {
 
         int numChatMessages = chatMessages.getAll().size();
         int numChatParticipants = chatParticipants.getAll().size();
+
         if (numChatMessages != numChatParticipants) {
             /// ohhhhhhh shit
             throw new RuntimeException("ooohhh shit this hacky sharedprefs thing broke");
@@ -114,6 +119,11 @@ public class MyGcmListenerService extends GcmListenerService {
         // keys are sequential ints
         chatMessages.edit().putString(Integer.toString(numChatMessages), msg).apply();
         chatParticipants.edit().putString(Integer.toString(numChatParticipants), from).apply();
+        if (action != null) {
+            // maybe we don't populate all of these? only the index values that are not null
+            SharedPreferences chatActions = context.getSharedPreferences(SHARED_PREFS_ACTIONS, Context.MODE_PRIVATE);
+            chatActions.edit().putString(Integer.toString(numChatMessages), action).apply();
+        }
     }
 
     /**

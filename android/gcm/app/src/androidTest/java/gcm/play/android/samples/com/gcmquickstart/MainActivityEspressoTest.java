@@ -37,9 +37,9 @@ public class MainActivityEspressoTest {
     public ActivityTestRule<MainActivity> mActivityRule =
             new ActivityTestRule<>(MainActivity.class);
 
-    @Test
-    public void displayInformationText_sameActivity() {
-        onView(withId(R.id.informationTextView)).check(matches(isDisplayed()));
-    }
+//    @Test
+//    public void displayInformationText_sameActivity() {
+//        onView(withId(R.id.informationTextView)).check(matches(isDisplayed()));
+//    }
 
 }

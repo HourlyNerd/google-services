@@ -56,9 +56,9 @@ public class BidnessNeedActivity extends AppCompatActivity {
                 String currentMsg = businessNeed.getText().toString();
                 // store locally because we ignore this message when push notifications come in
                 String username = UserManager.getUserName(BidnessNeedActivity.this);
-                MyGcmListenerService.addMessageToStorage(BidnessNeedActivity.this, currentMsg, username);
+                MyGcmListenerService.addMessageToStorage(BidnessNeedActivity.this, currentMsg, username, null);
 
-                new AsyncGcmSender().execute(currentMsg, UserManager.getUserName(BidnessNeedActivity.this));
+                new AsyncGcmSender().execute(currentMsg, UserManager.getUserName(BidnessNeedActivity.this), null);
                 startActivity(new Intent(BidnessNeedActivity.this, WaitingForChatActivity.class));
             }
         });
