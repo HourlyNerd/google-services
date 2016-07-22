@@ -57,6 +57,7 @@ public class GcmSender {
             JSONObject jGcmData = new JSONObject();
             JSONObject jData = new JSONObject();
             jData.put("message", args[0].trim());
+            jData.put("sender", "jordan");
             // Where to send GCM message.
             if (args.length > 1 && args[1] != null) {
                 jGcmData.put("to", args[1].trim());
