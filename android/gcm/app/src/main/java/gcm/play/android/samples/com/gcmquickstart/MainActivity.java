@@ -18,12 +18,14 @@ package gcm.play.android.samples.com.gcmquickstart;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.ProgressBar;
@@ -76,8 +78,6 @@ public class MainActivity extends AppCompatActivity {
             startService(intent);
         }
 
-        startActivity(new Intent(this, ChatActivity.class));
-
         // TODO just for testing
 //        startActivity(new Intent(this, BidnessNeedActivity.class));
     }
@@ -86,6 +86,32 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         registerReceiver();
+
+        String username = UserManager.getUserName(this);
+        if (username == null) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle(null);
+            builder.setMessage("Who are you?");
+            builder.setPositiveButton("Business/Mark", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    UserManager.setUserName(MainActivity.this, "mark");
+                    startActivity(new Intent(MainActivity.this, ChatActivity.class));
+                }
+            });
+            builder.setNegativeButton("Nerd/Jordan", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    UserManager.setUserName(MainActivity.this, "jordan");
+                    startActivity(new Intent(MainActivity.this, ChatActivity.class));
+                }
+            });
+            Log.i("CATALANT", "About to build dialog...");
+            builder.create().show();
+            Log.i("CATALANT", "Dialog shown (?)");
+        } else {
+            startActivity(new Intent(this, ChatActivity.class));
+        }
     }
 
     @Override
